@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown & LaTeX Document Creator</title>
 
-    <!-- 1. External Libraries (remain in head) -->
+    <!-- 1. External Libraries -->
     <script>
         MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], packages: {'[+]': ['ams', 'boxed']}}, svg: {fontCache: 'global'}};
     </script>
@@ -67,7 +67,7 @@
 <body>
     <div class="container">
         <div id="theme-switcher-container">
-            <button id="theme-toggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+            <button id="theme-toggle" title="Toggle Theme"><i class="fas fa-sun"></i></button> <!-- Default to sun icon -->
             <span id="theme-indicator">Theme: Light</span>
         </div>
 
@@ -93,12 +93,6 @@
         </main>
     </div>
 
-    <!-- 
-      SCRIPT MOVED HERE - This is the definitive fix.
-      By placing the script at the end of the body, we guarantee all HTML elements
-      above it are loaded and available before the script runs.
-      This removes the need for the DOMContentLoaded event listener.
-    -->
     <script>
         // --- Get all DOM elements once the page is ready ---
         const themeToggle = document.getElementById('theme-toggle');
@@ -116,7 +110,9 @@
         // --- Define All Functions ---
         const applyTheme = (theme) => {
             document.documentElement.setAttribute('data-theme', theme);
-            themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            // *** THE FIX IS HERE: REVERSED THE ICONS ***
+            // Show sun for light mode, moon for dark mode.
+            themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-moon"></i>' : '<i class="fas fa-sun"></i>';
             themeIndicator.textContent = `Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`;
             localStorage.setItem('theme', theme);
         };
