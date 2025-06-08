@@ -1,11 +1,11 @@
 <!DOCTYPE html>
-<html lang="en" data-theme="light"> <!-- Default theme -->
+<html lang="en" data-theme="light">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Markdown & LaTeX Document Creator</title>
 
-    <!-- 1. External Libraries -->
+    <!-- 1. External Libraries (remain in head) -->
     <script>
         MathJax = { tex: { inlineMath: [['$','$'],['\\(','\\)']], displayMath: [['$$','$$'],['\\[','\\]']], packages: {'[+]': ['ams', 'boxed']}}, svg: {fontCache: 'global'}};
     </script>
@@ -13,152 +13,69 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 
-    <!-- 2. Embedded CSS with Theme Variables -->
+    <!-- 2. Embedded CSS -->
     <style>
-        /* --- THEME DEFINITIONS --- */
         :root {
-            /* Light Mode Palette */
-            --color-bg-page: #f8f9fa;
-            --color-bg-container: #ffffff;
-            --color-text-primary: #212529;
-            --color-text-secondary: #6c757d;
-            --color-accent: #007bff;
-            --color-accent-hover: #0056b3;
-            --color-danger: #dc3545;
-            --color-danger-hover: #c82333;
-            --color-success: #28a745;
-            --color-success-hover: #218838;
-            --color-border: #e0e0e0;
-            --color-input-bg: #ffffff;
-            --color-input-border: #ced4da;
-            --color-box-bg: #f0f7ff;
-            --color-box-border: #cce0ff;
-            --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --color-bg-page: #f8f9fa; --color-bg-container: #ffffff; --color-text-primary: #212529; --color-text-secondary: #6c757d;
+            --color-accent: #007bff; --color-accent-hover: #0056b3; --color-danger: #dc3545; --color-danger-hover: #c82333;
+            --color-success: #28a745; --color-success-hover: #218838; --color-border: #e0e0e0; --color-input-bg: #ffffff;
+            --color-input-border: #ced4da; --color-box-bg: #f0f7ff; --color-box-border: #cce0ff; --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.08);
         }
-
         [data-theme="dark"] {
-            /* Dark Mode Palette */
-            --color-bg-page: #121212;
-            --color-bg-container: #1e1e1e;
-            --color-text-primary: #e0e0e0;
-            --color-text-secondary: #a0a0a0;
-            --color-accent: #4dabf7;
-            --color-accent-hover: #74c0fc;
-            --color-danger: #ff6b6b;
-            --color-danger-hover: #ff8787;
-            --color-success: #40c057;
-            --color-success-hover: #69db7c;
-            --color-border: #343a40;
-            --color-input-bg: #2b2b2b;
-            --color-input-border: #495057;
-            --color-box-bg: #2c3e50;
-            --color-box-border: #34495e;
-            --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.25);
+            --color-bg-page: #121212; --color-bg-container: #1e1e1e; --color-text-primary: #e0e0e0; --color-text-secondary: #a0a0a0;
+            --color-accent: #4dabf7; --color-accent-hover: #74c0fc; --color-danger: #ff6b6b; --color-danger-hover: #ff8787;
+            --color-success: #40c057; --color-success-hover: #69db7c; --color-border: #343a40; --color-input-bg: #2b2b2b;
+            --color-input-border: #495057; --color-box-bg: #2c3e50; --color-box-border: #34495e; --shadow-main: 0 4px 12px rgba(0, 0, 0, 0.25);
         }
-
-        /* --- General Styles using Variables --- */
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-            line-height: 1.7;
-            color: var(--color-text-primary);
-            background-color: var(--color-bg-page);
-            margin: 0;
-            padding: 2rem 1rem;
-            transition: background-color 0.3s, color 0.3s;
-        }
-        .container {
-            position: relative;
-            max-width: 850px;
-            margin: 0 auto;
-            background-color: var(--color-bg-container);
-            padding: 2rem 3rem;
-            border-radius: 8px;
-            box-shadow: var(--shadow-main);
-            border: 1px solid var(--color-border);
-            transition: background-color 0.3s, border-color 0.3s;
-        }
-        header { text-align: center; margin-bottom: 2rem; }
-        h1 { color: var(--color-accent); }
-        code { background-color: var(--color-border); padding: 0.2em 0.4em; border-radius: 3px; }
-        hr { border: 0; height: 1px; background-color: var(--color-border); margin: 2rem 0; }
-
-        /* --- Theme Toggle Button --- */
-        #theme-toggle {
-            position: absolute;
-            top: 1.5rem;
-            right: 1.5rem;
-            background: none;
-            border: 2px solid var(--color-border);
-            color: var(--color-text-secondary);
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            font-size: 1.1em;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            transition: all 0.3s;
-        }
-        #theme-toggle:hover {
-            color: var(--color-accent);
-            border-color: var(--color-accent);
-            transform: rotate(15deg);
-        }
-        
-        /* --- Input Controls UI --- */
-        .custom-file-upload {
-            border: 2px solid var(--color-accent);
-            color: var(--color-accent);
-            background-color: transparent;
-        }
-        .custom-file-upload:hover {
-            background-color: var(--color-accent);
-            color: var(--color-bg-container);
-        }
-        .toggle-button { color: var(--color-accent); text-decoration: underline; background: none; border:none; cursor:pointer; font-size:1em; margin-top:1rem; }
-        #paste-container { display: none; margin-top: 1.5rem; }
-        #text-input-area {
-            width: 100%; height: 250px; box-sizing: border-box;
-            background-color: var(--color-input-bg);
-            color: var(--color-text-primary);
-            border: 1px solid var(--color-input-border);
-            border-radius: 4px; padding: 10px; font-size: 1em; line-height: 1.5; resize: vertical;
-        }
-        .render-button { background-color: var(--color-success); color: white; border: none; width: 100%; padding: 12px; border-radius: 5px; font-weight: bold; cursor: pointer; margin-top: 1rem; }
-        .render-button:hover { background-color: var(--color-success-hover); }
-
-        /* --- Output Controls (Print/PDF) --- */
-        #output-controls { display: none; justify-content: flex-end; align-items: center; padding-bottom: 1rem; margin-bottom: 1rem; border-bottom: 1px solid var(--color-border); gap: 10px; }
-        .action-button { background-color: transparent; font-size: 1em; padding: 10px 20px; cursor: pointer; border-radius: 5px; font-weight: bold; transition: all 0.2s ease-in-out; }
-        .action-button:hover { transform: translateY(-2px); }
-        .print-btn { border: 2px solid var(--color-accent); color: var(--color-accent); }
-        .print-btn:hover { background-color: var(--color-accent); color: var(--color-bg-container); }
-        .pdf-btn { border: 2px solid var(--color-danger); color: var(--color-danger); }
-        .pdf-btn:hover { background-color: var(--color-danger); color: white; }
-        .action-button:disabled { background-color: var(--color-text-secondary); border-color: var(--color-text-secondary); color: var(--color-bg-container); cursor: not-allowed; transform: none; }
-
-        /* --- Rendered Content Area --- */
-        #output .placeholder { color: var(--color-text-secondary); text-align: center; padding: 4rem 0; border: 2px dashed var(--color-border); border-radius: 5px; }
-        #output h3 { border-bottom: 2px solid var(--color-accent); padding-bottom: 8px; margin-top: 2.5rem; color: var(--color-accent); }
-        #output h4 { margin-top: 1.5rem; color: var(--color-text-primary); }
-        .mjx-math .mjx-box { background-color: var(--color-box-bg); padding: 0.2em 0.4em !important; border: 1px solid var(--color-box-border); border-radius: 4px; }
-        
+        body { font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,"Helvetica Neue",Arial,sans-serif; line-height:1.7; color:var(--color-text-primary); background-color:var(--color-bg-page); margin:0; padding:2rem 1rem; transition:background-color .3s,color .3s; }
+        .container { position:relative; max-width:850px; margin:0 auto; background-color:var(--color-bg-container); padding:2rem 3rem; border-radius:8px; box-shadow:var(--shadow-main); border:1px solid var(--color-border); transition:background-color .3s,border-color .3s; }
+        header { text-align:center; margin-bottom:2rem; }
+        h1 { color:var(--color-accent); }
+        code { background-color:var(--color-border); padding:.2em .4em; border-radius:3px; }
+        hr { border:0; height:1px; background-color:var(--color-border); margin:2rem 0; }
+        #theme-switcher-container { position:absolute; top:1.5rem; right:1.5rem; display:flex; flex-direction:column; align-items:center; }
+        #theme-toggle { background:none; border:2px solid var(--color-border); color:var(--color-text-secondary); width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:1.1em; display:flex; justify-content:center; align-items:center; transition:all .3s; }
+        #theme-toggle:hover { color:var(--color-accent); border-color:var(--color-accent); transform:rotate(15deg); }
+        #theme-indicator { font-size:0.7em; color:var(--color-text-secondary); margin-top:5px; transition:color .3s; }
+        .custom-file-upload { border:2px solid var(--color-accent); color:var(--color-accent); background-color:transparent; display:inline-block; padding:10px 20px; cursor:pointer; border-radius:5px; font-weight:bold; transition:all .2s ease-in-out; font-size:1em; }
+        .custom-file-upload:hover { background-color:var(--color-accent); color:var(--color-bg-container); transform:translateY(-2px); }
+        input[type="file"] { display:none; }
+        .toggle-button { color:var(--color-accent); text-decoration:underline; background:none; border:none; cursor:pointer; font-size:1em; margin-top:1rem; }
+        #paste-container { display:none; margin-top:1.5rem; }
+        #text-input-area { width:100%; height:250px; box-sizing:border-box; background-color:var(--color-input-bg); color:var(--color-text-primary); border:1px solid var(--color-input-border); border-radius:4px; padding:10px; font-size:1em; line-height:1.5; resize:vertical; }
+        .render-button { background-color:var(--color-success); color:white; border:none; width:100%; padding:12px; border-radius:5px; font-weight:bold; cursor:pointer; margin-top:1rem; }
+        .render-button:hover { background-color:var(--color-success-hover); }
+        #output-controls { display:none; justify-content:flex-end; align-items:center; padding-bottom:1rem; margin-bottom:1rem; border-bottom:1px solid var(--color-border); gap:10px; }
+        .action-button { background-color:transparent; font-size:1em; padding:10px 20px; cursor:pointer; border-radius:5px; font-weight:bold; transition:all .2s ease-in-out; }
+        .action-button:hover { transform:translateY(-2px); }
+        .print-btn { border:2px solid var(--color-accent); color:var(--color-accent); }
+        .print-btn:hover { background-color:var(--color-accent); color:var(--color-bg-container); }
+        .pdf-btn { border:2px solid var(--color-danger); color:var(--color-danger); }
+        .pdf-btn:hover { background-color:var(--color-danger); color:white; }
+        .action-button:disabled { background-color:var(--color-text-secondary); border-color:var(--color-text-secondary); color:var(--color-bg-container); cursor:not-allowed; transform:none; }
+        #output .placeholder { color:var(--color-text-secondary); text-align:center; padding:4rem 0; border:2px dashed var(--color-border); border-radius:5px; }
+        #output h3 { border-bottom:2px solid var(--color-accent); padding-bottom:8px; margin-top:2.5rem; color:var(--color-accent); }
+        #output h4 { margin-top:1.5rem; color:var(--color-text-primary); }
+        .mjx-math .mjx-box { background-color:var(--color-box-bg); padding:.2em .4em !important; border:1px solid var(--color-box-border); border-radius:4px; }
         @media print {
-            body { background-color: #fff; padding: 0; margin: 0; }
-            header, hr, #output-controls, #theme-toggle { display: none !important; }
-            .container { box-shadow: none; border: none; padding: 0 1in; max-width: 100%; }
+            body { background-color:#fff; padding:0; margin:0; }
+            header, hr, #output-controls, #theme-switcher-container { display:none !important; }
+            .container { box-shadow:none; border:none; padding:0 1in; max-width:100%; }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <button id="theme-toggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+        <div id="theme-switcher-container">
+            <button id="theme-toggle" title="Toggle Theme"><i class="fas fa-moon"></i></button>
+            <span id="theme-indicator">Theme: Light</span>
+        </div>
 
         <header>
             <h1>Markdown & LaTeX Document Creator</h1>
             <p style="color: var(--color-text-secondary);">Select a file or paste text to render. Then, print or save as a PDF.</p>
             <label for="file-upload" class="custom-file-upload"><i class="fas fa-file-upload"></i> Choose File</label>
+            <input id="file-upload" type="file" accept=".txt,.md">
             <button id="toggle-paste-area" class="toggle-button">Or Paste Text Manually</button>
             <div id="paste-container">
                 <textarea id="text-input-area" placeholder="Paste your markdown and LaTeX content here..."></textarea>
@@ -176,120 +93,123 @@
         </main>
     </div>
 
+    <!-- 
+      SCRIPT MOVED HERE - This is the definitive fix.
+      By placing the script at the end of the body, we guarantee all HTML elements
+      above it are loaded and available before the script runs.
+      This removes the need for the DOMContentLoaded event listener.
+    -->
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            // --- Get all DOM elements ---
-            const themeToggle = document.getElementById('theme-toggle');
-            const fileInput = document.getElementById('file-upload');
-            const outputDiv = document.getElementById('output');
-            const toggleButton = document.getElementById('toggle-paste-area');
-            const pasteContainer = document.getElementById('paste-container');
-            const textInputArea = document.getElementById('text-input-area');
-            const renderPastedButton = document.getElementById('render-pasted-text');
-            const outputControls = document.getElementById('output-controls');
-            const printButton = document.getElementById('print-button');
-            const pdfButton = document.getElementById('pdf-button');
+        // --- Get all DOM elements once the page is ready ---
+        const themeToggle = document.getElementById('theme-toggle');
+        const themeIndicator = document.getElementById('theme-indicator');
+        const fileInput = document.getElementById('file-upload');
+        const outputDiv = document.getElementById('output');
+        const toggleButton = document.getElementById('toggle-paste-area');
+        const pasteContainer = document.getElementById('paste-container');
+        const textInputArea = document.getElementById('text-input-area');
+        const renderPastedButton = document.getElementById('render-pasted-text');
+        const outputControls = document.getElementById('output-controls');
+        const printButton = document.getElementById('print-button');
+        const pdfButton = document.getElementById('pdf-button');
 
-            // --- Theme Switcher Logic ---
-            const applyTheme = (theme) => {
-                document.documentElement.setAttribute('data-theme', theme);
-                themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
-                localStorage.setItem('theme', theme);
-            };
+        // --- Define All Functions ---
+        const applyTheme = (theme) => {
+            document.documentElement.setAttribute('data-theme', theme);
+            themeToggle.innerHTML = theme === 'dark' ? '<i class="fas fa-sun"></i>' : '<i class="fas fa-moon"></i>';
+            themeIndicator.textContent = `Theme: ${theme.charAt(0).toUpperCase() + theme.slice(1)}`;
+            localStorage.setItem('theme', theme);
+        };
 
-            themeToggle.addEventListener('click', () => {
-                const currentTheme = document.documentElement.getAttribute('data-theme');
-                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-                applyTheme(newTheme);
+        const renderContent = (textContent) => {
+            outputDiv.innerHTML = parseToHTML(textContent);
+            outputControls.style.display = 'flex';
+            MathJax.typesetPromise([outputDiv]).catch(err => {
+                console.error('MathJax typesetting failed:', err);
+                showError("Error rendering math equations.");
             });
+        };
 
-            // Apply saved theme on initial load
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            applyTheme(savedTheme);
+        const showError = (message) => {
+            outputDiv.innerHTML = `<div class="placeholder" style="color: var(--color-danger); border-color: var(--color-danger);">${message}</div>`;
+            outputControls.style.display = 'none';
+        };
 
-
-            // --- Core Application Logic ---
-            const renderContent = (textContent) => {
-                outputDiv.innerHTML = parseToHTML(textContent);
-                outputControls.style.display = 'flex';
-                MathJax.typesetPromise([outputDiv]).catch((err) => {
-                    console.error('MathJax typesetting failed:', err);
-                    showError("Error rendering math equations.");
-                });
-            };
-
-            const showError = (message) => {
-                outputDiv.innerHTML = `<div class="placeholder" style="color: var(--color-danger); border-color: var(--color-danger);">${message}</div>`;
-                outputControls.style.display = 'none';
-            };
-
-            const generatePDF = () => {
-                const originalButtonContent = pdfButton.innerHTML;
-                pdfButton.disabled = true;
-                pdfButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Generating...`;
-                const element = document.getElementById('output');
-                const options = { margin: 0.5, filename: 'document.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }};
-                html2pdf().from(element).set(options).save().then(() => {
-                    pdfButton.disabled = false;
-                    pdfButton.innerHTML = originalButtonContent;
-                }).catch(err => {
-                    console.error("PDF generation failed:", err);
-                    showError("Could not generate PDF.");
-                    pdfButton.disabled = false;
-                    pdfButton.innerHTML = originalButtonContent;
-                });
-            };
-            
-            const parseToHTML = (text) => {
-                const blocks = text.split(/(\$\$[\s\S]*?\$\$)/);
-                let html = '';
-                for (const block of blocks) {
-                    if (block.startsWith('$$') && block.endsWith('$$')) { html += block; continue; }
-                    const lines = block.split('\n');
-                    let inList = null;
-                    const closeList = () => { if (inList) { html += `</${inList}>`; inList = null; } };
-                    for (const line of lines) {
-                        let processedLine = line.trim();
-                        if (processedLine.length === 0) { closeList(); continue; }
-                        if (processedLine.startsWith('### ')) { closeList(); html += `<h3>${processedLine.substring(4)}</h3>`; continue; }
-                        if (processedLine.startsWith('#### ')) { closeList(); html += `<h4>${processedLine.substring(5)}</h4>`; continue; }
-                        if (processedLine === '---') { closeList(); html += '<hr>'; continue; }
-                        const isOl = /^\d+\.\s/.test(processedLine);
-                        const isUl = /^\*\s/.test(processedLine) || /^-\s/.test(processedLine);
-                        if (isOl) { if (inList !== 'ol') { closeList(); html += '<ol>'; inList = 'ol'; } html += `<li>${processedLine.replace(/^\d+\.\s/, '')}</li>`;
-                        } else if (isUl) { if (inList !== 'ul') { closeList(); html += '<ul>'; inList = 'ul'; } html += `<li>${processedLine.substring(2)}</li>`;
-                        } else { closeList(); processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>'); html += `<p>${processedLine}</p>`; }
-                    }
-                    closeList();
+        const generatePDF = () => {
+            const originalButtonContent = pdfButton.innerHTML;
+            pdfButton.disabled = true;
+            pdfButton.innerHTML = `<i class="fas fa-spinner fa-spin"></i> Generating...`;
+            const element = document.getElementById('output');
+            const options = { margin: 0.5, filename: 'document.pdf', image: { type: 'jpeg', quality: 0.98 }, html2canvas: { scale: 2, useCORS: true }, jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }};
+            html2pdf().from(element).set(options).save().then(() => {
+                pdfButton.disabled = false;
+                pdfButton.innerHTML = originalButtonContent;
+            }).catch(err => {
+                console.error("PDF generation failed:", err);
+                showError("Could not generate PDF.");
+                pdfButton.disabled = false;
+                pdfButton.innerHTML = originalButtonContent;
+            });
+        };
+        
+        const parseToHTML = (text) => {
+            const blocks = text.split(/(\$\$[\s\S]*?\$\$)/);
+            let html = '';
+            for (const block of blocks) {
+                if (block.startsWith('$$') && block.endsWith('$$')) { html += block; continue; }
+                const lines = block.split('\n');
+                let inList = null;
+                const closeList = () => { if (inList) { html += `</${inList}>`; inList = null; } };
+                for (const line of lines) {
+                    let processedLine = line.trim();
+                    if (processedLine.length === 0) { closeList(); continue; }
+                    if (processedLine.startsWith('### ')) { closeList(); html += `<h3>${processedLine.substring(4)}</h3>`; continue; }
+                    if (processedLine.startsWith('#### ')) { closeList(); html += `<h4>${processedLine.substring(5)}</h4>`; continue; }
+                    if (processedLine === '---') { closeList(); html += '<hr>'; continue; }
+                    const isOl = /^\d+\.\s/.test(processedLine);
+                    const isUl = /^\*\s/.test(processedLine) || /^-\s/.test(processedLine);
+                    if (isOl) { if (inList !== 'ol') { closeList(); html += '<ol>'; inList = 'ol'; } html += `<li>${processedLine.replace(/^\d+\.\s/, '')}</li>`;
+                    } else if (isUl) { if (inList !== 'ul') { closeList(); html += '<ul>'; inList = 'ul'; } html += `<li>${processedLine.substring(2)}</li>`;
+                    } else { closeList(); processedLine = processedLine.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\*(.*?)\*/g, '<em>$1</em>'); html += `<p>${processedLine}</p>`; }
                 }
-                return html;
-            };
+                closeList();
+            }
+            return html;
+        };
 
-            // --- Set up remaining Event Listeners ---
-            fileInput.addEventListener('change', (event) => {
-                const file = event.target.files[0];
-                if (!file) return;
-                const reader = new FileReader();
-                reader.onload = (e) => renderContent(e.target.result);
-                reader.onerror = () => showError("Error reading the file.");
-                reader.readAsText(file);
-            });
-
-            toggleButton.addEventListener('click', () => {
-                const isHidden = pasteContainer.style.display === 'none' || pasteContainer.style.display === '';
-                pasteContainer.style.display = isHidden ? 'block' : 'none';
-                toggleButton.textContent = isHidden ? 'Hide Manual Input' : 'Or Paste Text Manually';
-            });
-
-            renderPastedButton.addEventListener('click', () => {
-                const content = textInputArea.value;
-                if (content.trim() === '') { showError("The text area is empty."); return; }
-                renderContent(content);
-            });
-
-            printButton.addEventListener('click', () => window.print());
-            pdfButton.addEventListener('click', generatePDF);
+        // --- Attach All Event Listeners ---
+        themeToggle.addEventListener('click', () => {
+            const newTheme = document.documentElement.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            applyTheme(newTheme);
         });
+        
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (e) => renderContent(e.target.result);
+            reader.onerror = () => showError("Error reading the file.");
+            reader.readAsText(file);
+        });
+
+        toggleButton.addEventListener('click', () => {
+            const isHidden = pasteContainer.style.display === 'none' || pasteContainer.style.display === '';
+            pasteContainer.style.display = isHidden ? 'block' : 'none';
+            toggleButton.textContent = isHidden ? 'Hide Manual Input' : 'Or Paste Text Manually';
+        });
+
+        renderPastedButton.addEventListener('click', () => {
+            const content = textInputArea.value;
+            if (content.trim() === '') { showError("The text area is empty."); return; }
+            renderContent(content);
+        });
+
+        printButton.addEventListener('click', () => window.print());
+        pdfButton.addEventListener('click', generatePDF);
+
+        // --- Initial Setup ---
+        const savedTheme = localStorage.getItem('theme') || 'light';
+        applyTheme(savedTheme);
     </script>
 </body>
 </html>
